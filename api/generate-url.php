@@ -28,14 +28,23 @@ try {
     $encryptedId = encryptVideoId($videoId);
     $encryptedUrl = generateVideoUrl($videoId);
     
+    // Verificar que la URL se generó correctamente
+    if (empty($encryptedUrl)) {
+        throw new Exception('No se pudo generar la URL encriptada');
+    }
+    
     // Generar el código iframe
     $iframeCode = '<iframe src="' . htmlspecialchars($encryptedUrl) . '" frameborder="0" width="510" height="400" scrolling="no" allowfullscreen></iframe>';
+    
+    // Generar enlace de descarga directamente aquí
+    $downloadUrl = str_replace('video.php?v=', 'download.php?v=', $encryptedUrl);
     
     // Para debug - ver qué se está generando
     $debugInfo = [
         'videoId' => $videoId,
         'encryptedId' => $encryptedId,
         'encryptedUrl' => $encryptedUrl,
+        'downloadUrl' => $downloadUrl,
         'baseUrl' => BASE_URL
     ];
     
@@ -43,6 +52,7 @@ try {
     echo json_encode([
         'success' => true,
         'encryptedUrl' => $encryptedUrl,
+        'downloadUrl' => $downloadUrl,
         'iframeCode' => $iframeCode,
         'debug' => $debugInfo // Solo para debug, quitar en producción
     ]);
@@ -50,7 +60,13 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'error' => 'Error al generar URL: ' . $e->getMessage()
+        'error' => 'Error al generar URL: ' . $e->getMessage(),
+        'debug' => [
+            'videoId' => $videoId,
+            'exception' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ]
     ]);
 }
 ?>
