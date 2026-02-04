@@ -3,8 +3,8 @@ session_start();
 
 // Configuración de la base de datos
 define('USERS', [
-    'admin' => password_hash('mp4secure2025', PASSWORD_DEFAULT),
-    'usuario1' => password_hash('mp4secure2025', PASSWORD_DEFAULT)
+    'admin' => password_hash('4544', PASSWORD_DEFAULT),
+    'usuario1' => password_hash('4544', PASSWORD_DEFAULT)
 ]);
 
 // Clave secreta para encriptación
